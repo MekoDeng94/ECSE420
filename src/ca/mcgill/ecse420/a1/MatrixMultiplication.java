@@ -2,19 +2,27 @@ package ca.mcgill.ecse420.a1;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MatrixMultiplication {
 
-    private static final int NUMBER_THREADS = 1;
-    private static final int MATRIX_SIZE = 2000;
+    private static final int NUMBER_THREADS = 2;
+    private static final int MATRIX_SIZE = 5000;
 
     public static void main(String[] args) {
 
         // Generate two random matrices, same size
         double[][] a = generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
         double[][] b = generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
-        sequentialMultiplyMatrix(a, b);
-        parallelMultiplyMatrix(a, b);
+        long startTime = System.nanoTime();
+        double[][] sequential = sequentialMultiplyMatrix(a, b);
+        long endTime = System.nanoTime();
+        System.out.println("Sequential total time: " + (endTime - startTime)/1000000000.0 + " s");
+        startTime = System.nanoTime();
+        double[][] parallel = parallelMultiplyMatrix(a, b);
+        endTime = System.nanoTime();
+        System.out.println("Parallel total time: " + (endTime - startTime)/1000000000.0 + " s");
+        compareMatrix(sequential, parallel);
     }
 
     /**
@@ -32,7 +40,7 @@ public class MatrixMultiplication {
             for (int j = 0; j < MATRIX_SIZE; j++){
                 c[i][j] = 0.0000;
                 for (int k = 0; k < MATRIX_SIZE; k++) {
-                    c[i][j] = a[i][k] * b[k][j];
+                    c[i][j] += a[i][k] * b[k][j];
                 }
             }
         }
@@ -48,8 +56,45 @@ public class MatrixMultiplication {
      * @return the result of the multiplication
      * */
     public static double[][] parallelMultiplyMatrix(double[][] a, double[][] b) {
-        double[][] m = new double[4][4];
-        return m ;
+        ExecutorService executor = Executors.newFixedThreadPool(NUMBER_THREADS);
+
+        double[][] c = new double [MATRIX_SIZE][MATRIX_SIZE] ;
+
+        for (int i = 0; i < MATRIX_SIZE; i++){
+            for (int j = 0; j < MATRIX_SIZE; j++){
+                executor.execute(new TaskClass(i,j,a,b,c));
+            }
+        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+
+        }
+        return c;
+    }
+
+    public static class TaskClass implements Runnable {
+        int row;
+        int column;
+        double[][] a;
+        double[][] b;
+        double[][] c;
+
+        public TaskClass(int row, int column, double[][] a, double[][] b, double[][] c ) {
+            this.row = row;
+            this.column = column;
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+
+        public void run() {
+            c[row][column] = 0;
+            for (int i=0; i<MATRIX_SIZE; i++){
+                c[row][column] += a[row][i] * b[i][column];
+            }
+        }
     }
 
     /**
@@ -66,6 +111,16 @@ public class MatrixMultiplication {
             }
         }
         return matrix;
+    }
+
+    private static void compareMatrix(double[][] a, double[][] b){
+        for(int i = 0; i < MATRIX_SIZE; i++){
+            for(int j = 0; j < MATRIX_SIZE; j++){
+                if(a[i][j] != b[i][j]){
+                    System.out.println("We fucked up");
+                }
+            }
+        }
     }
 
 }
