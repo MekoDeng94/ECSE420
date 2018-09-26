@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ab1dbc63-6b13-4158-a21f-0d0bacedb018" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/Deadlock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -48,19 +48,21 @@
     <session id="1492288658">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.1" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.19" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1433" />
+          <entry key="java" value="3018" />
           <entry key="txt" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1433" />
+          <entry key="JAVA" value="3018" />
           <entry key="PLAIN_TEXT" value="21" />
         </counts>
       </usages-collector>
@@ -82,8 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/MatrixMultiplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="76" column="53" selection-start-line="76" selection-start-column="45" selection-end-line="76" selection-end-column="53" />
+            <state relative-caret-position="227">
+              <caret line="69" column="37" selection-start-line="69" selection-start-column="21" selection-end-line="69" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -91,42 +93,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/Deadlock.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+            <state relative-caret-position="476">
+              <caret line="28" selection-start-line="28" selection-end-line="28" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/util/concurrent/ThreadPoolExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="1134" selection-start-line="1134" selection-end-line="1134" />
-              <folding>
-                <element signature="e#25686#25687#0" expanded="true" />
-                <element signature="e#25725#25726#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/lang/Thread.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="104">
-              <caret line="843" selection-start-line="843" selection-end-line="843" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="153">
+              <caret line="48" column="55" lean-forward="true" selection-start-line="48" selection-start-column="55" selection-end-line="48" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -149,9 +129,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java" />
         <option value="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/MatrixMultiplication.java" />
         <option value="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/Deadlock.java" />
+        <option value="$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java" />
       </list>
     </option>
   </component>
@@ -202,7 +182,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537473434223" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537981980378" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -222,9 +202,22 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Deadlock">
+  <component name="RunManager" selected="Application.DiningPhilosophers">
     <configuration name="Deadlock" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ca.mcgill.ecse420.a1.Deadlock" />
+      <module name="ECSE_420" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ca.mcgill.ecse420.a1.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DiningPhilosophers" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ca.mcgill.ecse420.a1.DiningPhilosophers" />
       <module name="ECSE_420" />
       <extension name="coverage">
         <pattern>
@@ -252,9 +245,11 @@
     <list>
       <item itemvalue="Application.MatrixMultiplication" />
       <item itemvalue="Application.Deadlock" />
+      <item itemvalue="Application.DiningPhilosophers" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DiningPhilosophers" />
         <item itemvalue="Application.Deadlock" />
         <item itemvalue="Application.MatrixMultiplication" />
       </list>
@@ -296,18 +291,18 @@
       <window_info id="Capture Tool" order="4" />
       <window_info id="Structure" order="5" sideWeight="0.501355" side_tool="true" visible="true" weight="0.011336032" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" weight="0.3291815" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3291815" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49878544" visible="true" weight="0.27402136" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.46797153" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="10" visible="true" weight="0.3291815" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49959514" weight="0.3291815" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50121456" side_tool="true" visible="true" weight="0.27402136" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.3291815" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.3291815" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -330,28 +325,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="1st question answered" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/MatrixMultiplication.java</url>
-          <line>47</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/MatrixMultiplication.java</url>
-          <line>94</line>
-          <properties />
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/MatrixMultiplication.java</url>
-          <line>119</line>
-          <properties />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="b" />
@@ -404,12 +377,13 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java">
+    <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/util/concurrent/ThreadPoolExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="1015">
+          <caret line="1134" selection-start-line="1134" selection-end-line="1134" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#25686#25687#0" expanded="true" />
+            <element signature="e#25725#25726#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -421,31 +395,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/util/concurrent/ThreadPoolExecutor.java">
+    <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/Deadlock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="1134" selection-start-line="1134" selection-end-line="1134" />
-          <folding>
-            <element signature="e#25686#25687#0" expanded="true" />
-            <element signature="e#25725#25726#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="476">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/MatrixMultiplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="76" column="53" selection-start-line="76" selection-start-column="45" selection-end-line="76" selection-end-column="53" />
+        <state relative-caret-position="227">
+          <caret line="69" column="37" selection-start-line="69" selection-start-column="21" selection-end-line="69" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/Deadlock.java">
+    <entry file="file://$PROJECT_DIR$/src/ca/mcgill/ecse420/a1/DiningPhilosophers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+        <state relative-caret-position="153">
+          <caret line="48" column="55" lean-forward="true" selection-start-line="48" selection-start-column="55" selection-end-line="48" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
