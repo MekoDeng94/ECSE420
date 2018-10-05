@@ -18,22 +18,16 @@ public class Deadlock {
     }
 
     public static class TaskClass_1 implements Runnable {
-        public TaskClass_1() {
-
-        }
         public void run() {
-
             System.out.println("Thread 1 - Waiting for lock 1");
             synchronized (lock_1){
                 System.out.println("Thread 1 - Got lock 1");
-
                 try {
                     System.out.println("Thread 1 - sleeping");
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
 
                 }
-
                 System.out.println("Thread 1 - Waiting for lock 2");
                 synchronized (lock_2) {}
             }
@@ -41,21 +35,16 @@ public class Deadlock {
     }
 
     public static class TaskClass_2 implements Runnable {
-        public TaskClass_2() {
-
-        }
         public void run() {
             System.out.println("Thread 2 - Waiting for lock 2");
             synchronized (lock_2){
                 System.out.println("Thread 2 - Got lock 2");
-
                 try {
                     System.out.println("Thread 2 - sleeping");
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
 
                 }
-
                 System.out.println("Thread 2 - Waiting for lock 1");
                 synchronized (lock_1) {}
             }

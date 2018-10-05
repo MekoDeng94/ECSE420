@@ -14,15 +14,18 @@ public class MatrixMultiplication {
         // Generate two random matrices, same size
         double[][] a = generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
         double[][] b = generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
-        long startTime = System.nanoTime();
+
+        long startTime = System.nanoTime();     //for timing purposes
         double[][] sequential = sequentialMultiplyMatrix(a, b);
-        long endTime = System.nanoTime();
+        long endTime = System.nanoTime();       //for timing purposes
+
         System.out.println("Sequential total time: " + (endTime - startTime)/1000000000.0 + " s");
-        startTime = System.nanoTime();
+
+        startTime = System.nanoTime();      //for timing purposes
         double[][] parallel = parallelMultiplyMatrix(a, b);
-        endTime = System.nanoTime();
+        endTime = System.nanoTime();        //for timing purposes
+
         System.out.println("Parallel total time: " + (endTime - startTime)/1000000000.0 + " s");
-        compareMatrix(sequential, parallel);
     }
 
     /**
@@ -66,6 +69,7 @@ public class MatrixMultiplication {
             }
         }
         executor.shutdown();
+
         try {
             executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
@@ -112,15 +116,4 @@ public class MatrixMultiplication {
         }
         return matrix;
     }
-
-    private static void compareMatrix(double[][] a, double[][] b){
-        for(int i = 0; i < MATRIX_SIZE; i++){
-            for(int j = 0; j < MATRIX_SIZE; j++){
-                if(a[i][j] != b[i][j]){
-                    System.out.println("We fucked up");
-                }
-            }
-        }
-    }
-
 }

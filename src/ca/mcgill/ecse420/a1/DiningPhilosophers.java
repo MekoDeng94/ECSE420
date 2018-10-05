@@ -2,7 +2,6 @@ package ca.mcgill.ecse420.a1;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class DiningPhilosophers {
 
@@ -76,17 +75,6 @@ public class DiningPhilosophers {
                 Thread.currentThread().interrupt();
                 return;
             }
-
-
-            //picks up left chopstick
-            //picks up right chopstick
-
-            //eat
-
-            //put down left chopstick
-            //put down right chopstick
         }
-
-
     }
 }
