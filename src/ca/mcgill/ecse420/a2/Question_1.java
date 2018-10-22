@@ -1,59 +1,47 @@
 package ca.mcgill.ecse420.a2;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class Question_1{
-    private AtomicInteger[] level;
-    private AtomicInteger[] victim;
+public class Question_1 {
+    private static final int THREAD_NUMBER = 5;
+    private static int count = 100;
 
-    private int n;
+    static FilterLock lock = new FilterLock(THREAD_NUMBER);
+    static BakeryAlgorithm b_lock = new BakeryAlgorithm(THREAD_NUMBER);
 
-    /**
-     * Creates the level and victim structures
-     *
-     * @param n size of level and victim structures
-     */
-    public Question_1 (int n){
-        this.n = n;
-        level = new AtomicInteger[n];
-        victim = new AtomicInteger[n];
-        for (int i = 0; i< n; i++){
-            level[i] = new AtomicInteger();
-            victim[i] = new AtomicInteger();
+    public static void main(String[] args){
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_NUMBER);
+
+        for (int i = 0 ; i< THREAD_NUMBER; i++){
+            executor.execute(new TaskClass());
         }
+
+        executor.shutdown();
+
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+
+        }
+        System.out.println(count);
     }
 
-    public void lock(){
-        int thread_id = (int) Thread.currentThread().getId() % n;
-        for (int L = 1; L < n; L++){
-            level[thread_id].set(L);
-            victim[L].set(thread_id);
+    public static class TaskClass implements Runnable{
 
-            while(isCurrentThreadAVictim(thread_id, L)){
-            }
-        }
-    }
+        public TaskClass(){
 
-    private boolean isCurrentThreadAVictim(int currentThreadID, int L){
-        if(victim[L].get() != currentThreadID){
-            return false;
         }
 
-        for(int k = 0; k < level.length; k++){
-            if(k == currentThreadID){
-                continue;
-            }
-            if(level[k].get() >= L){
-                return true;
+        public void run(){
+            for (int i =0;i< 20; i++){
+                //lock.lock();
+                b_lock.lock();
+                count --;
+                //lock.unlock();
+                b_lock.unlock();
             }
         }
-
-        return false;
-    }
-
-    public void unlock() {
-        int thread_id = (int) Thread.currentThread().getId() % n;
-        level[thread_id].set(0);
     }
 }
