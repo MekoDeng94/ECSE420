@@ -1,6 +1,5 @@
 package ca.mcgill.ecse420.a2;
 
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FilterLock {
@@ -14,37 +13,37 @@ public class FilterLock {
      *
      * @param n size of level and victim structures
      */
-    public FilterLock(int n){
+    public FilterLock(int n) {
         this.n = n;
         level = new AtomicInteger[n];
         victim = new AtomicInteger[n];
-        for (int i = 0; i< n; i++){
+        for (int i = 0; i < n; i++) {
             level[i] = new AtomicInteger();
             victim[i] = new AtomicInteger();
         }
     }
 
-    public void lock(){
+    public void lock() {
         int thread_id = (int) Thread.currentThread().getId() % n;
-        for (int L = 1; L < n; L++){
+        for (int L = 1; L < n; L++) {
             level[thread_id].set(L);
             victim[L].set(thread_id);
 
-            while(isCurrentThreadAVictim(thread_id, L)){
+            while (isCurrentThreadAVictim(thread_id, L)) {
             }
         }
     }
 
-    private boolean isCurrentThreadAVictim(int currentThreadID, int L){
-        if(victim[L].get() != currentThreadID){
+    private boolean isCurrentThreadAVictim(int currentThreadID, int L) {
+        if (victim[L].get() != currentThreadID) {
             return false;
         }
 
-        for(int k = 0; k < level.length; k++){
-            if(k == currentThreadID){
+        for (int k = 0; k < level.length; k++) {
+            if (k == currentThreadID) {
                 continue;
             }
-            if(level[k].get() >= L){
+            if (level[k].get() >= L) {
                 return true;
             }
         }
