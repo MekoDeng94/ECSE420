@@ -1,18 +1,17 @@
 package ca.mcgill.ecse420.a3;
 
 public class Question_2_Test {
-    public static final int NUM_THREADS = 5;
+    public static final int NUM_THREADS = 50;
+    public static final int MAX_NUMBER = 30;
 
     public static void main (String[] args) {
         Question_2<Integer> list = new Question_2<>();
 
         Task[] tasks = new Task[NUM_THREADS];
+        Thread[] threads = new Thread[NUM_THREADS];
+
         for (int i=0; i< NUM_THREADS; i++) {
             tasks[i] = new Task(list, i);
-        }
-
-        Thread[] threads = new Thread[NUM_THREADS];
-        for (int i = 0; i < threads.length; i++) {
             threads[i]=new Thread(tasks[i]);
             threads[i].start();
         }
@@ -21,70 +20,79 @@ public class Question_2_Test {
 
     public static class Task implements Runnable {
         private Question_2<Integer> list;
-        private int threadNum;
+        private int threadID;
 
         // Constructor
-        public Task(Question_2<Integer> list, int threadNum){
+        public Task(Question_2<Integer> list, int threadID){
             this.list = list;
-            this.threadNum = threadNum;
+            this.threadID = threadID;
         }
 
 
         @Override
         public void run() {
             while (true) {
-                add();
-                contains();
-                remove();
+                int task = (int) (Math.random() * 3);
+                switch (task){
+                    case 0:
+                        add();
+                        break;
+                    case 1:
+                        contains();
+                        break;
+                    case 2:
+                        remove();
+                        break;
+                }
             }
         }
 
         private void add() {
-            Integer item = (int) ((Math.random())*10);
+            Integer item = (int) ((Math.random())*MAX_NUMBER);
 
-            System.out.println("Thread "+ (threadNum+1) +" is adding "+item+".");
+            System.out.println("Thread "+ (threadID) +": Adding "+item+".");
 
-            boolean isAdded = list.add(item);
+            boolean didAdded = list.add(item);
 
-            if (isAdded) {
-                System.out.println("Successfully added " + item + " to list.");
-                System.out.println();
+            if (didAdded) {
+                System.out.println("Thread "+ (threadID) +": Successfully added " + item + " to the list.");
             } else {
-                System.out.println(item + " is already in list!");
-                System.out.println();
+                System.out.println("Thread "+ (threadID) + ": Failed to add "+item + " to the list.");
             }
+
+            System.out.println();
         }
 
         private void contains() {
-            Integer item = (int) ((Math.random())*10);
+            Integer item = (int) ((Math.random())*MAX_NUMBER);
 
-            System.out.println("Thread "+ (threadNum+1) +" is checking for "+item+".");
+            System.out.println("Thread "+ (threadID) +": Checking for "+item+".");
 
             boolean isContained = list.contains(item);
 
             if (isContained) {
-                System.out.println("List DOES contain " + item + ".");
-                System.out.println();
+                System.out.println("Thread "+ (threadID) +": The list contains " + item + ".");
             } else {
-                System.out.println("List DOES NOT contain " + item + ".");
-                System.out.println();
+                System.out.println("Thread "+ (threadID) +": The list doesn't contain " + item + ".");
             }
+
+            System.out.println();
         }
 
         private void remove() {
-            Integer item = (int) ((Math.random())*10);
+            Integer item = (int) ((Math.random())*MAX_NUMBER);
 
-            System.out.println("Thread "+ (threadNum+1) +" is removing "+item+".");
+            System.out.println("Thread "+ (threadID) +": Removing "+item+".");
 
-            boolean isRemoved = list.remove(item);
+            boolean didRemoved = list.remove(item);
 
-            if (isRemoved) {
-                System.out.println("Successfully removed " + item + " from list.");
-                System.out.println();
+            if (didRemoved) {
+                System.out.println("Thread "+ (threadID) + ": Successfully removed " + item + " from the list.");
             } else {
-                System.out.println(item + " is not in list!");
-                System.out.println();
+                System.out.println("Thread "+ (threadID) + ": Failed to remove " + item + " from the list");
             }
+
+            System.out.println();
         }
 
     }
