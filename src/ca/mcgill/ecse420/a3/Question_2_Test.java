@@ -1,98 +1,92 @@
 package ca.mcgill.ecse420.a3;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Question_2_Test {
     public static final int NUM_THREADS = 50;
-    public static final int MAX_NUMBER = 30;
+    private static ExecutorService exec = Executors.newFixedThreadPool(8);
 
-    public static void main (String[] args) {
+    public static AtomicInteger FailedCount = new AtomicInteger();
+
+    public static void main(String[] args) {
         Question_2<Integer> list = new Question_2<>();
 
         Task[] tasks = new Task[NUM_THREADS];
-        Thread[] threads = new Thread[NUM_THREADS];
-
-        for (int i=0; i< NUM_THREADS; i++) {
-            tasks[i] = new Task(list, i);
-            threads[i]=new Thread(tasks[i]);
-            threads[i].start();
+        Future<?>[] jobs = new Future[NUM_THREADS];
+        for (int i = 0; i < NUM_THREADS; i++) {
+            tasks[i] = new Task(list, i, i + 10);
+            jobs[i] = exec.submit(tasks[i]);
         }
+
+        for (int i = 0; i < NUM_THREADS; i++) {
+            try {
+                jobs[i].get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        exec.shutdown();
+        System.out.println("Number of failed test: " + FailedCount.get());
     }
 
 
     public static class Task implements Runnable {
         private Question_2<Integer> list;
         private int threadID;
+        private int number;
 
         // Constructor
-        public Task(Question_2<Integer> list, int threadID){
+        public Task(Question_2<Integer> list, int threadID, int number) {
             this.list = list;
             this.threadID = threadID;
+            this.number = number;
         }
 
 
         @Override
         public void run() {
-            while (true) {
-                int task = (int) (Math.random() * 3);
-                switch (task){
-                    case 0:
-                        add();
-                        break;
-                    case 1:
-                        contains();
-                        break;
-                    case 2:
-                        remove();
-                        break;
+            try {
+                add();
+                Thread.sleep(5);
+
+                if (!contains()) {
+                    System.out.println("Thread " + (threadID) + ": Test FAILED, The list doesn't contains " + number + ".");
+                    FailedCount.incrementAndGet();
                 }
+
+                Thread.sleep(5);
+                remove();
+                Thread.sleep(5);
+                if (contains()) {
+                    System.out.println("Thread " + (threadID) + ": Test FAILED, The list contains " + number + ".");
+                    FailedCount.incrementAndGet();
+                }
+            } catch (Exception e) {
+
             }
+
         }
 
         private void add() {
-            Integer item = (int) ((Math.random())*MAX_NUMBER);
-
-            System.out.println("Thread "+ (threadID) +": Adding "+item+".");
-
-            boolean didAdded = list.add(item);
-
-            if (didAdded) {
-                System.out.println("Thread "+ (threadID) +": Successfully added " + item + " to the list.");
-            } else {
-                System.out.println("Thread "+ (threadID) + ": Failed to add "+item + " to the list.");
-            }
-
-            System.out.println();
+            Integer item = number;
+            list.add(item);
         }
 
-        private void contains() {
-            Integer item = (int) ((Math.random())*MAX_NUMBER);
-
-            System.out.println("Thread "+ (threadID) +": Checking for "+item+".");
-
+        private boolean contains() {
+            Integer item = number;
             boolean isContained = list.contains(item);
-
-            if (isContained) {
-                System.out.println("Thread "+ (threadID) +": The list contains " + item + ".");
-            } else {
-                System.out.println("Thread "+ (threadID) +": The list doesn't contain " + item + ".");
-            }
-
-            System.out.println();
+            return isContained;
         }
 
         private void remove() {
-            Integer item = (int) ((Math.random())*MAX_NUMBER);
-
-            System.out.println("Thread "+ (threadID) +": Removing "+item+".");
-
-            boolean didRemoved = list.remove(item);
-
-            if (didRemoved) {
-                System.out.println("Thread "+ (threadID) + ": Successfully removed " + item + " from the list.");
-            } else {
-                System.out.println("Thread "+ (threadID) + ": Failed to remove " + item + " from the list");
-            }
-
-            System.out.println();
+            Integer item = number;
+            list.remove(item);
         }
 
     }

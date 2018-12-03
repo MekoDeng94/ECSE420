@@ -20,7 +20,7 @@ public class Question_3_b<T> {
     public void enqueue(T item){
         int rs = remainingSlots.get();
         while (rs <= 0 || !remainingSlots.compareAndSet(rs,rs-1)){
-            rs = remainingSlots.get();
+            return;
         }
 
         int t = tail.getAndIncrement();
@@ -30,7 +30,10 @@ public class Question_3_b<T> {
 
     public T dequeue(){
         int h = head.getAndIncrement();
-        while(h >= tailC.get()){};
+        while(h >= tailC.get()){
+            head.decrementAndGet();
+            return null;
+        };
         T item = items[h % items.length];
         remainingSlots.incrementAndGet();
 

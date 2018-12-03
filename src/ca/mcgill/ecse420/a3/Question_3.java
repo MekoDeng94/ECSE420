@@ -20,19 +20,17 @@ public class Question_3<T> {
         headIndex = 0;
         tailIndex = 0;
         this.items = (T[]) new Object[capacity];
-        this.notEmpty = lockHead.newCondition();
-        this.notFull = lockTail.newCondition();
         this.lockHead = new ReentrantLock();
         this.lockTail = new ReentrantLock();
+        this.notEmpty = lockTail.newCondition();
+        this.notFull = lockHead.newCondition();
     }
 
     public void enqueue(T item){
         lockTail.lock();
         try{
             while(tailIndex - headIndex ==items.length){
-                try {
-                    notFull.await();
-                } catch(InterruptedException e){}
+                return;
             }
             items[tailIndex % items.length] = item;
 
@@ -50,9 +48,7 @@ public class Question_3<T> {
         lockHead.lock();
         try {
             while(tailIndex - headIndex ==0){
-                try{
-                    notEmpty.await();
-                } catch(InterruptedException e){}
+                return null;
             }
             T x = items[headIndex %items.length];
             headIndex++;

@@ -1,27 +1,27 @@
 package ca.mcgill.ecse420.a3;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class Question4 {
-    static ExecutorService exec = Executors.newFixedThreadPool(8);
+    static ExecutorService exec = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         long startTime = 0;
         long endTime = 0;
-        exec = Executors.newCachedThreadPool();
+        double[][] A = generateSquareMatrix(2048);
+        double[] B = generateVector(2048);
+        double[] C_sequential = null;
+
+        startTime = System.nanoTime();      //for timing purposes
+        C_sequential = sequentialMultiplicationMatrixVector(A,B);
+        endTime = System.nanoTime();
+        System.out.println("Sequential total time: " + (endTime - startTime) / 1000000000.0 + " s");
 
         startTime = System.nanoTime();      //for timing purposes
 
-        double[][] A = generateSquareMatrix(2000);
-        double[] B = generateVector(2000);
-        Matrix A_matrix = new Matrix(A, 0, 0, A.length);
-        Vector B_vector = new Vector(B, 0, B.length);
-        Vector C = null;
+        double[] C_parallel = null;
         try {
-            C = mul(A_matrix, B_vector);
+            C_parallel = mul(A, B);
         } catch (Exception e) {
             System.out.println("Failed");
 
@@ -30,15 +30,17 @@ public class Question4 {
 
         endTime = System.nanoTime();      //for timing purposes
 
-        System.out.println("Size " + 2000 + "Parallel total time: " + (endTime - startTime) / 1000000000.0 + " s");
-
+        System.out.println("Parallel total time: " + (endTime - startTime) / 1000000000.0 + " s");
+        for(int i = 0; i < C_parallel.length; i++){
+            if(C_parallel[i] != C_sequential[i]){
+                System.out.println("Parallel multiplication returned the wrong vector");
+                break;
+            }
+        }
     }
 
     private static double[][] generateSquareMatrix(int size) {
         int N = size;
-        if (size % 2 != 0) {
-            N++;
-        }
         double matrix[][] = new double[N][N];
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
@@ -50,9 +52,6 @@ public class Question4 {
 
     private static double[] generateVector(int size) {
         int N = size;
-        if (size % 2 != 0) {
-            N++;
-        }
         double vector[] = new double[N];
         for (int i = 0; i < size; i++) {
             vector[i] = (double) ((int) (Math.random() * 10.0));
@@ -60,102 +59,120 @@ public class Question4 {
         return vector;
     }
 
-    static Matrix add(Matrix a, Matrix b) throws ExecutionException, InterruptedException {
-        int n = a.getDim();
-        Matrix c = new Matrix(n);
-        Future<?> future = exec.submit(new AddTask(a, b, c));
-        future.get();
-        return c;
-    }
-
-    static Vector mul(Matrix a, Vector b) throws ExecutionException, InterruptedException {
-        int n = a.getDim();
-        Vector c = new Vector(n);
-        Future<?> future = exec.submit(new MulTask(a, b, c));
-        future.get();
-        return c;
-    }
-
-    static class AddTask implements Runnable {
-        Matrix a, b, c;
-
-        public AddTask(Matrix myA, Matrix myB, Matrix myC) {
-            a = myA;
-            b = myB;
-            c = myC;
+    private static double[] sequentialMultiplicationMatrixVector(double[][]a, double[] b){
+        double[] c = new double[b.length];
+        for(int i = 0; i < a.length; i++){
+            for(int j = 0; j < b.length; j++){
+                c[i] += a[i][j] * b[j];
+            }
         }
 
-        public void run() {
-            try {
-                int n = a.getDim();
-                if (n == 1) {
-                    c.set(0, 0, a.get(0, 0) + b.get(0, 0));
-                } else {
-                    Matrix[][] aa = a.split(), bb = b.split(), cc = c.split();
-                    Future<?>[][] future = (Future<?>[][]) new Future[2][2];
-                    for (int i = 0; i < 2; i++) {
-                        for (int j = 0; j < 2; j++) {
-                            future[i][j] =
-                                    exec.submit(new AddTask(aa[i][j], bb[i][j], cc[i][j]));
-                        }
-                    }
-                    for (int i = 0; i < 2; i++) {
-                        for (int j = 0; j < 2; j++) {
-                            future[i][j].get();
-                        }
+        return c;
+    }
+
+    static double[] mul(double[][] a, double[] b) throws ExecutionException, InterruptedException {
+        int n = b.length;
+        double[][] c = new double[n][n];
+        Future<?> future = exec.submit(new MulTask(a, b, c, 0, 0, 0, n, 1));
+        future.get();
+
+        double[] mergedC = new double[n];
+
+        Future<?>[] addFutures = new Future[a.length];
+        for(int i = 0; i < addFutures.length; i++){
+            addFutures[i] = exec.submit(new AddTask(c, mergedC, i));
+        }
+
+        for(int i =0; i < addFutures.length; i++){
+            addFutures[i].get();
+        }
+
+        /*for(int i = 0; i < c.length; i++){
+            for(int j =0; j < c[0].length; j++){
+                mergedC[i] += c[i][j];
+            }
+        }*/
+
+        return mergedC;
+    }
+
+    static class MulTask implements Callable<Object> {
+        double[][] a;
+        double[] b;
+        double[][] c;
+        int rowA;
+        int colA;
+        int rowB;
+        int size;
+
+
+        public MulTask(double[][] a, double[] b, double[][] c, int rowA, int colA, int rowB, int size, int numThreads) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.rowA = rowA;
+            this.colA = colA;
+            this.rowB = rowB;
+            this.size = size;
+        }
+
+        public Object call() {
+
+            if(size == 1){
+                c[rowA][colA] = a[rowA][colA] * b[rowB];
+                return null;
+            }else if( size <= 64){
+                int newSize = size/2;
+                MulTask m1 = new MulTask(a,b,c, rowA, colA, rowB, newSize, 1);
+                MulTask m2 = new MulTask(a,b,c, rowA, colA+newSize, rowB+newSize, newSize, 1);
+                MulTask m3 = new MulTask(a,b,c, rowA+newSize, colA, rowB,  size - newSize, 1);
+                MulTask m4 = new MulTask(a,b,c, rowA+newSize, colA+newSize, rowB+newSize, size - newSize, 1);
+
+                m1.call();
+                m2.call();
+                m3.call();
+                m4.call();
+                return null;
+            }else{
+                int newSize = size/2;
+                Future<?>[] futures = new Future[4];
+                futures[0] = exec.submit(new MulTask(a,b,c, rowA, colA, rowB, newSize, 1));
+                futures[1] = exec.submit(new MulTask(a,b,c, rowA, colA+newSize, rowB+newSize, newSize, 1));
+                futures[2] = exec.submit(new MulTask(a,b,c, rowA+newSize, colA, rowB, size - newSize, 1));
+                futures[3] = exec.submit(new MulTask(a,b,c, rowA+newSize, colA+newSize, rowB+newSize, size - newSize, 1));
+
+                for(int i =0; i < futures.length; i++){
+                    try {
+                        futures[i].get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
                     }
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                return null;
             }
         }
     }
 
-    static class MulTask implements Runnable {
-        Matrix a;
-        Vector b, c;
+    static class AddTask implements Callable<Object> {
+        double[][] c;
+        double[] finalC;
+        int row;
 
-        public MulTask(Matrix myA, Vector myB, Vector myC) {
-            a = myA;
-            b = myB;
-            c = myC;
+
+        public AddTask(double[][] c, double[] finalC, int row) {
+            this.c = c;
+            this.finalC = finalC;
+            this.row = row;
         }
 
-        public void run() {
-            try {
-                if (a.getDim() == 1) {
-                    double valA = a.get(0, 0);
-                    double valB = b.get(0);
-                    c.add(0, valA * valB);
-                } else {
-                    Matrix[][] aa = a.split();
-                    Vector[] bb = b.split(), cc = c.split();
-                    Future<?>[][] future = (Future<?>[][]) new Future[2][2];
-                    for (int i = 0; i < 2; i++)
-                        for (int j = 0; j < 2; j++) {
-                            future[i][j] =
-                                    exec.submit(new MulTask(aa[i][j], bb[j], cc[i]));
-                        }
-
-                   /* future[0][0][0] =
-                            exec.submit(new MulTask(aa[0][0], bb[0], cc[0]));
-                    future[0][0][1] =
-                            exec.submit(new MulTask(aa[0][1], bb[1], cc[0]));
-
-                    future[1][0][0] =
-                            exec.submit(new MulTask(aa[1][0], bb[0], cc[1]));
-                    future[1][0][1] =
-                            exec.submit(new MulTask(aa[1][1], bb[1], cc[1]));*/
-
-
-                    for (int i = 0; i < 2; i++)
-                        for (int j = 0; j < 2; j++)
-                            future[i][j].get();
-
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        public Object call() {
+            for(int i = 0; i < finalC.length; i++){
+                finalC[row] += c[row][i];
             }
+
+            return null;
         }
     }
 }
