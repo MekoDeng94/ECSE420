@@ -19,21 +19,21 @@ public class Question_3_b<T> {
 
     public void enqueue(T item){
         int rs = remainingSlots.get();
-        while (rs <= 0 || !remainingSlots.compareAndSet(rs,rs-1)){
+        if (rs <= 0 || !remainingSlots.compareAndSet(rs,rs-1)){
             return;
         }
 
         int t = tail.getAndIncrement();
         items[t % items.length] = item;
-        while(tailC.compareAndSet(t, t+1)){};
+        while(tailC.compareAndSet(t, t+1)){}
     }
 
     public T dequeue(){
         int h = head.getAndIncrement();
-        while(h >= tailC.get()){
+        if(h >= tailC.get()){
             head.decrementAndGet();
             return null;
-        };
+        }
         T item = items[h % items.length];
         remainingSlots.incrementAndGet();
 

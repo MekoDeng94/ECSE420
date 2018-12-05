@@ -6,12 +6,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("ALL")
 public class Question_2_Test {
-    public static final int NUM_THREADS = 50;
+    private static final int NUM_THREADS = 50;
     private static ExecutorService exec = Executors.newFixedThreadPool(8);
 
-    public static AtomicInteger FailedCount = new AtomicInteger();
+    private static AtomicInteger FailedCount = new AtomicInteger();
 
+    @SuppressWarnings("Duplicates")
     public static void main(String[] args) {
         Question_2<Integer> list = new Question_2<>();
 
@@ -25,9 +27,7 @@ public class Question_2_Test {
         for (int i = 0; i < NUM_THREADS; i++) {
             try {
                 jobs[i].get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
@@ -67,7 +67,7 @@ public class Question_2_Test {
                     System.out.println("Thread " + (threadID) + ": Test FAILED, The list contains " + number + ".");
                     FailedCount.incrementAndGet();
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
 
@@ -80,8 +80,7 @@ public class Question_2_Test {
 
         private boolean contains() {
             Integer item = number;
-            boolean isContained = list.contains(item);
-            return isContained;
+            return list.contains(item);
         }
 
         private void remove() {

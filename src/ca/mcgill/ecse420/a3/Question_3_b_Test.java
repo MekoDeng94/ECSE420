@@ -7,14 +7,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Question_3_Test {
+public class Question_3_b_Test {
     private static final int NUM_THREADS = 50;
     private static ExecutorService exec = Executors.newFixedThreadPool(1);
 
     private static AtomicInteger FailedCount = new AtomicInteger();
     private static HashSet<Integer> queueElements = new HashSet<>();
     public static void main(String[] args) {
-        Question_3<Integer> list = new Question_3<>(NUM_THREADS);
+        Question_3_b<Integer> list = new Question_3_b<>(NUM_THREADS);
 
         Task[] tasks = new Task[NUM_THREADS];
         Future<?>[] jobs = new Future[NUM_THREADS];
@@ -55,13 +55,13 @@ public class Question_3_Test {
 
 
     static class Task implements Runnable {
-        private Question_3<Integer> queue;
+        private Question_3_b<Integer> queue;
         private boolean shouldQueue;
         private int threadID;
         private int number;
 
         // Constructor
-        Task(Question_3<Integer> queue, int threadID, int number, boolean shouldQueue) {
+        Task(Question_3_b<Integer> queue, int threadID, int number, boolean shouldQueue) {
             this.queue = queue;
             this.threadID = threadID;
             this.number = number;

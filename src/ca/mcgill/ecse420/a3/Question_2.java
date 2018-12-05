@@ -5,7 +5,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Question_2<T> {
     private Node<Integer> head;
-    private Lock lock = new ReentrantLock();
 
     class Node<T> {
         private T item;
@@ -30,8 +29,8 @@ public class Question_2<T> {
     }
 
     public Question_2(){
-        head = new Node<Integer>(Integer.MIN_VALUE);
-        head.next = new Node<Integer>(Integer.MAX_VALUE);
+        head = new Node<>(Integer.MIN_VALUE);
+        head.next = new Node<>(Integer.MAX_VALUE);
     }
 
     public boolean add(T item){
@@ -66,7 +65,7 @@ public class Question_2<T> {
 
     public boolean remove(T item) {
         Node pred = null;
-        Node curr = null;
+        Node curr;
         int key = item.hashCode();
         head.lock();
         try {
@@ -95,7 +94,7 @@ public class Question_2<T> {
 
     public boolean contains(T item){
         Node pred = null;
-        Node curr = null;
+        Node curr;
 
         int key = item.hashCode();
         try {

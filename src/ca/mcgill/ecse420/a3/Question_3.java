@@ -29,7 +29,7 @@ public class Question_3<T> {
     public void enqueue(T item){
         lockTail.lock();
         try{
-            while(tailIndex - headIndex ==items.length){
+            if(tailIndex - headIndex ==items.length){
                 return;
             }
             items[tailIndex % items.length] = item;
@@ -47,7 +47,7 @@ public class Question_3<T> {
     public T dequeue(){
         lockHead.lock();
         try {
-            while(tailIndex - headIndex ==0){
+            if(tailIndex - headIndex ==0){
                 return null;
             }
             T x = items[headIndex %items.length];
